@@ -1,8 +1,12 @@
 package entity
 
-type Term struct {
-	Id            int64
-	SubContractId int64
+type SubContract struct {
+	Id          int64
+	UserId      int64
+	ProductId   int
+	ProjectId   int
+	SplitRuleId int
+	OwnerId     int
 
 	Prin       int64
 	PaidPrin   int64
@@ -21,8 +25,8 @@ type Term struct {
 	PaidOvdIntPena   int64
 	UnpaidOvdIntPena int64
 
-	StartDate  int
-	EndDate    int
 	Status     LoanStatus
 	CreateTime int64
+
+	SubContracts []SubContract
 }
