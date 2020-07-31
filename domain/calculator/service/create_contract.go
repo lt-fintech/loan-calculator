@@ -1,8 +1,19 @@
 package service
 
-import entity "loan-calculator/domain/calculator/entity"
+import (
+	"loan-calculator/domain/calculator/entity"
+	product "loan-calculator/domain/product/entity"
+)
 
-func generateContract(amount int64) *entity.Contract {
+type PaymentRequest struct {
+	Amount       int64
+	RequestTime  int64
+	RepayDay     int
+	TermNum      int
+	InterestType product.InterestType
+}
+
+func generateContract(paymentRequest *PaymentRequest) *entity.Contract {
 	var contract *entity.Contract
 	contract = new(entity.Contract)
 	return contract

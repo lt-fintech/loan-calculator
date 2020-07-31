@@ -5,6 +5,8 @@ import (
 )
 
 func TestCreateContract(t *testing.T) {
-	contract := generateContract(100)
+	payment := new(PaymentRequest)
+
+	contract := generateContract(payment)
 	t.Log(contract)
 }
