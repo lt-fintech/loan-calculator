@@ -46,9 +46,12 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 	if sub.Terms == nil {
 		//calculate pmt per term
 		var amountByTerm int64
-		p := math.Pow(1.0+float64(sub.Rate)/float64(1000000), float64(contract.TermNum))
+		var p float64 = math.Pow(1.0+float64(sub.Rate*30)/float64(1000000), float64(contract.TermNum))
+
 		amountByTerm = int64((float64(sub.Prin*int64(sub.Rate)*30) * p / float64(1000000)) / (p - float64(1)))
-		fmt.Println("amountByTerm=", amountByTerm)
+		fmt.Printf("rate=%d\n", contract.Rate)
+		fmt.Printf("p=%f\n", p)
+		fmt.Printf("amountByTerm=%d\n", amountByTerm)
 
 	}
 }

@@ -7,6 +7,7 @@ import (
 
 type PaymentRequest struct {
 	Amount       int64
+	Rate         int
 	RequestTime  int64
 	RepayDay     int
 	TermNum      int
@@ -17,6 +18,7 @@ func generateContract(paymentRequest *PaymentRequest) *entity.Contract {
 	var contract *entity.Contract
 	contract = new(entity.Contract)
 	contract.Prin = paymentRequest.Amount
+	contract.Rate = paymentRequest.Rate
 	contract.RepayDay = paymentRequest.RepayDay
 	contract.TermNum = paymentRequest.TermNum
 	contract.GenerateSubContract()

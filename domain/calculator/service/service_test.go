@@ -9,6 +9,7 @@ func TestCreateContract(t *testing.T) {
 	payment.Amount = 50000
 	payment.RepayDay = 2
 	payment.TermNum = 6
+	payment.Rate = 300
 
 	contract := generateContract(payment)
 	t.Log(contract)
