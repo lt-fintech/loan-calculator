@@ -16,5 +16,9 @@ type PaymentRequest struct {
 func generateContract(paymentRequest *PaymentRequest) *entity.Contract {
 	var contract *entity.Contract
 	contract = new(entity.Contract)
+	contract.Prin = paymentRequest.Amount
+	contract.RepayDay = paymentRequest.RepayDay
+	contract.TermNum = paymentRequest.TermNum
+	contract.GenerateSubContract()
 	return contract
 }

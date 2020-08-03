@@ -1,5 +1,10 @@
 package entity
 
+import (
+	"fmt"
+	"math"
+)
+
 type SubContract struct {
 	Id          int64
 	UserId      int64
@@ -25,8 +30,25 @@ type SubContract struct {
 	PaidOvdIntPena   int64
 	UnpaidOvdIntPena int64
 
+	Rate        int
+	OvdPrinRate int
+	OvdIntRate  int
+
 	Status     LoanStatus
 	CreateTime int64
 
-	SubContracts []SubContract
+	SubContracts []*SubContract
+	Terms        []*Term
+}
+
+func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContract) {
+
+	if sub.Terms == nil {
+		//calculate pmt per term
+		var amountByTerm int64
+		p := math.Pow(1.0+float64(sub.Rate)/float64(1000000), float64(contract.TermNum))
+		amountByTerm = int64((float64(sub.Prin*int64(sub.Rate)*30) * p / float64(1000000)) / (p - float64(1)))
+		fmt.Println("amountByTerm=", amountByTerm)
+
+	}
 }
