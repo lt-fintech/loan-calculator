@@ -52,6 +52,10 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 		fmt.Printf("rate=%d\n", contract.Rate)
 		fmt.Printf("p=%f\n", p)
 		fmt.Printf("amountByTerm=%d\n", amountByTerm)
+		var firstInterest int64
+
+		firstInterest = int64(float64(sub.Prin*int64(sub.Rate)*30) / float64(1000000))
+		fmt.Printf("firstInterest=%d\n", firstInterest)
 
 	}
 }
