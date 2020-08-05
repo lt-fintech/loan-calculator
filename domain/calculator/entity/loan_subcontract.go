@@ -59,7 +59,13 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 
 			prin := amountByTerm - interest
 			remainPrin = remainPrin - prin
-			fmt.Printf("interest=%d\n", interest)
+			fmt.Printf("prin=%d interest=%d\n", prin, interest)
+			var term *Term
+			term = new(Term)
+			term.Interest = interest
+			term.Prin = prin
+			term.Status = NORMAL
+			sub.Terms = append(sub.Terms, term)
 
 		}
 
