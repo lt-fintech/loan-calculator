@@ -2,6 +2,7 @@ package entity
 
 import (
 	"fmt"
+	infra "loan-calculator/infrastructure"
 	"math"
 )
 
@@ -43,6 +44,7 @@ type SubContract struct {
 
 func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContract) {
 
+	accountTime := infra.GetTimestamp()
 	if sub.Terms == nil {
 		//calculate pmt per term
 		var amountByTerm int64
@@ -65,9 +67,14 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			term.Interest = interest
 			term.Prin = prin
 			term.Status = NORMAL
+			term.CreateTime = accountTime
+			term.SubContractId = sub.Id
+			term.TrailInterest = interest
 			sub.Terms = append(sub.Terms, term)
 
 		}
-
 	}
+	sub.CreateTime = accountTime
+	sub.Prin = contract.Prin
+	sub.Rate = contract.Rate
 }

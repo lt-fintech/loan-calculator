@@ -13,4 +13,5 @@ func TestCreateContract(t *testing.T) {
 
 	contract := generateContract(payment)
 	t.Logf("%+v", contract)
+	t.Logf("%+v", contract.SubContract)
 }
