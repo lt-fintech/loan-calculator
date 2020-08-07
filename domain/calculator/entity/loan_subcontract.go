@@ -55,13 +55,23 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 		fmt.Printf("p=%f\n", p)
 		fmt.Printf("amountByTerm=%d\n", amountByTerm)
 		remainPrin := sub.Prin
+
+		//determind first term day
+		termStartDate := accountTime
+
 		for i := 0; i < contract.TermNum; i++ {
 			var interest int64
-			interest = int64(float64(remainPrin*int64(sub.Rate)*30) / float64(1000000))
+			termDay := 30
+			repayDate := infra.GetNextRepayDate(termStartDate, contract.RepayDay, 20)
+			if i == 0 {
+				firstTermDay := infra.GetBetweenDays(termStartDate, repayDate)
+				termDay = firstTermDay
+			}
+			interest = int64(float64(remainPrin*int64(sub.Rate)*int64(termDay)) / float64(1000000))
 
 			prin := amountByTerm - interest
 			remainPrin = remainPrin - prin
-			fmt.Printf("prin=%d interest=%d\n", prin, interest)
+			fmt.Printf("termDay=%d,prin=%d,interest=%d,repayDate=%d\n", termDay, prin, interest, repayDate)
 			var term *Term
 			term = new(Term)
 			term.Interest = interest
@@ -70,6 +80,10 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			term.CreateTime = accountTime
 			term.SubContractId = sub.Id
 			term.TrailInterest = interest
+			term.StartTime = termStartDate
+			term.EndTime = repayDate
+			// next term start date
+			termStartDate = repayDate
 			sub.Terms = append(sub.Terms, term)
 
 		}

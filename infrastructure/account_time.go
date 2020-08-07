@@ -3,27 +3,34 @@ package infrastructure
 import "time"
 
 func GetTimestamp() int64 {
-	return time.Now().UnixNano()
+	return time.Now().UnixNano() / 1e6
 }
 
-func GetNextRepayDate(repayDay int, minInterval int) int64 {
+func GetNextRepayDate(start int64, repayDay int, minInterval int) int64 {
 
-	now := time.Now()
+	now := time.Unix(0, start*1e6)
 	nowday := now.Day()
 	if nowday < repayDay && repayDay-nowday > minInterval {
-		return time.Date(now.Year(), now.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano()
+		return time.Date(now.Year(), now.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano() / 1e6
 	} else {
 		nextMonth := now.AddDate(0, 1, 0)
-		return time.Date(nextMonth.Year(), nextMonth.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano()
+		return time.Date(nextMonth.Year(), nextMonth.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano() / 1e6
 	}
 
 }
 
 func GetBetweenDays(from int64, to int64) int {
-	t1 := time.UnixNano(from)
-	t2 := time.UnixNano(to)
-	t1 = time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, time.Local)
-	t2 = time.Date(t2.Year(), t2.Month(), t2.Day(), 0, 0, 0, 0, time.Local)
+	fromTime := time.Unix(0, from*1e6)
+	t1 := time.Date(fromTime.Year(), fromTime.Month(), fromTime.Day(), 0, 0, 0, 0, time.Local)
+	toTime := time.Unix(0, to*1e6)
+	t2 := time.Date(toTime.Year(), toTime.Month(), toTime.Day(), 0, 0, 0, 0, time.Local)
 
-	return int(t1.Sub(t2).Hours() / 24)
+	return int(t2.Sub(t1).Hours() / 24)
+}
+
+func GetZeroTimeFromTimestamp(tm int64) int64 {
+	t := time.Unix(0, tm*1e6)
+	newT := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
+	return newT.UnixNano() / 1e6
+
 }

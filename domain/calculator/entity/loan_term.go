@@ -21,8 +21,8 @@ type Term struct {
 	PaidOvdIntPena   int64
 	UnpaidOvdIntPena int64
 
-	StartDate  int
-	EndDate    int
+	StartTime  int64
+	EndTime    int64
 	Status     LoanStatus
 	CreateTime int64
 }
