@@ -3,7 +3,6 @@ package entity
 import (
 	"fmt"
 	infra "loan-calculator/infrastructure"
-	"math"
 )
 
 type SubContract struct {
@@ -48,11 +47,8 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 	if sub.Terms == nil {
 		//calculate pmt per term
 		var amountByTerm int64
-		var p float64 = math.Pow(1.0+float64(sub.Rate*30)/float64(1000000), float64(contract.TermNum))
-
-		amountByTerm = int64((float64(sub.Prin*int64(sub.Rate)*30) * p / float64(1000000)) / (p - float64(1)))
+		amountByTerm = infra.PMTTermRepayAmount(sub.Rate, contract.TermNum, sub.Prin)
 		fmt.Printf("rate=%d\n", contract.Rate)
-		fmt.Printf("p=%f\n", p)
 		fmt.Printf("amountByTerm=%d\n", amountByTerm)
 		remainPrin := sub.Prin
 
@@ -67,9 +63,14 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 				firstTermDay := infra.GetBetweenDays(termStartDate, repayDate)
 				termDay = firstTermDay
 			}
-			interest = int64(float64(remainPrin*int64(sub.Rate)*int64(termDay)) / float64(1000000))
+			interest = infra.PMTTermInterst(sub.Rate, termDay, remainPrin)
 
-			prin := amountByTerm - interest
+			var prin int64
+			if i != contract.TermNum-1 {
+				prin = amountByTerm - interest
+			} else {
+				prin = remainPrin
+			}
 			remainPrin = remainPrin - prin
 			fmt.Printf("termDay=%d,prin=%d,interest=%d,repayDate=%d\n", termDay, prin, interest, repayDate)
 			var term *Term
