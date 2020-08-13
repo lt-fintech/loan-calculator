@@ -14,7 +14,13 @@ func GetNextRepayDate(start int64, repayDay int, minInterval int) int64 {
 		return time.Date(now.Year(), now.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano() / 1e6
 	} else {
 		nextMonth := now.AddDate(0, 1, 0)
-		return time.Date(nextMonth.Year(), nextMonth.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano() / 1e6
+		nextMonthRepayDay := time.Date(nextMonth.Year(), nextMonth.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano() / 1e6
+		if GetBetweenDays(start, nextMonthRepayDay) < minInterval {
+			next2Month := now.AddDate(0, 2, 0)
+			return time.Date(next2Month.Year(), next2Month.Month(), repayDay, 0, 0, 0, 0, time.Local).UnixNano() / 1e6
+		} else {
+			return nextMonthRepayDay
+		}
 	}
 
 }

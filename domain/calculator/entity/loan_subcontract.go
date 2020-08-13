@@ -57,12 +57,17 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 
 		for i := 0; i < contract.TermNum; i++ {
 			var interest int64
-			termDay := 30
 			repayDate := infra.GetNextRepayDate(termStartDate, contract.RepayDay, 20)
-			if i == 0 {
-				firstTermDay := infra.GetBetweenDays(termStartDate, repayDate)
-				termDay = firstTermDay
-			}
+			// every term acrual day
+			termDay := infra.GetBetweenDays(termStartDate, repayDate)
+			// every term 30 day
+
+			// var termDay int
+			// if i == 0 {
+			// 	termDay = infra.GetBetweenDays(termStartDate, repayDate)
+			// } else {
+			// 	termDay = 30
+			// }
 			interest = infra.PMTTermInterst(sub.Rate, termDay, remainPrin)
 
 			var prin int64

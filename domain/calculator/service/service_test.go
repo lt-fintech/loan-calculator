@@ -7,7 +7,7 @@ import (
 func TestCreateContract(t *testing.T) {
 	payment := new(PaymentRequest)
 	payment.Amount = 50000
-	payment.RepayDay = 28
+	payment.RepayDay = 1
 	payment.TermNum = 6
 	payment.Rate = 300
 
