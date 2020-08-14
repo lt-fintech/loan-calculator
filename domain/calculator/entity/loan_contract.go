@@ -22,6 +22,7 @@ type Contract struct {
 func (contract *Contract) GenerateSubContract() {
 	if contract.SubContract == nil {
 		sub := new(SubContract)
+		sub.UserId = contract.UserId
 		sub.Prin = contract.Prin
 		sub.Rate = contract.Rate
 		sub.OvdPrinRate = contract.OvdPrinRate

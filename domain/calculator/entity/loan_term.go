@@ -2,6 +2,7 @@ package entity
 
 type Term struct {
 	Id            int64
+	UserId        int64
 	SubContractId int64
 
 	Prin       int64
@@ -21,6 +22,7 @@ type Term struct {
 	PaidOvdIntPena   int64
 	UnpaidOvdIntPena int64
 
+	TermNo     int
 	StartTime  int64
 	EndTime    int64
 	Status     LoanStatus

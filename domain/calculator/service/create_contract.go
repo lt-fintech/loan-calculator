@@ -6,6 +6,7 @@ import (
 )
 
 type PaymentRequest struct {
+	UserId       int64
 	Amount       int64
 	Rate         int
 	RequestTime  int64
@@ -14,13 +15,14 @@ type PaymentRequest struct {
 	InterestType product.InterestType
 }
 
-func generateContract(paymentRequest *PaymentRequest) *entity.Contract {
+func GenerateContract(paymentRequest *PaymentRequest) *entity.Contract {
 	var contract *entity.Contract
 	contract = new(entity.Contract)
 	contract.Prin = paymentRequest.Amount
 	contract.Rate = paymentRequest.Rate
 	contract.RepayDay = paymentRequest.RepayDay
 	contract.TermNum = paymentRequest.TermNum
+	contract.UserId = paymentRequest.UserId
 	contract.GenerateSubContract()
 	return contract
 }

@@ -80,6 +80,7 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			fmt.Printf("termDay=%d,prin=%d,interest=%d,repayDate=%d\n", termDay, prin, interest, repayDate)
 			var term *Term
 			term = new(Term)
+			term.UserId = contract.UserId
 			term.Interest = interest
 			term.Prin = prin
 			term.Status = NORMAL
@@ -90,10 +91,12 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			term.EndTime = repayDate
 			// next term start date
 			termStartDate = repayDate
+			term.TermNo = i
 			sub.Terms = append(sub.Terms, term)
 
 		}
 	}
+	sub.UserId = contract.UserId
 	sub.CreateTime = accountTime
 	sub.Prin = contract.Prin
 	sub.Rate = contract.Rate
