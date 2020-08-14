@@ -1,2 +1,4 @@
+github.com/gorilla/mux v1.7.4 h1:VuZ8uybHlWmqV03+zRzdwKL4tUnIp1MAQtp1mIFE1bc=
+github.com/gorilla/mux v1.7.4/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/lt-fintech/loan-calculator v0.0.0-20200728134047-0f6bd2823de3 h1:9l/+mW2clNkeZ9nLXO0guRleOxmBw/KKj+zGR9n0Xsg=
 github.com/lt-fintech/loan-calculator v0.0.0-20200728134047-0f6bd2823de3/go.mod h1:i3WSsyElUXf3z86IZXESNeho2mWKtJgKxd4royYLii8=
