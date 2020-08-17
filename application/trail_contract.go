@@ -52,6 +52,7 @@ func TrailPayment(request *PaymentTrailRequest) *PaymentTrailResponse {
 		repayPlan.Interest = item.Interest
 		repayPlan.RepayDate = item.EndTime
 		repayPlan.TermNo = item.TermNo
+		response.RepayPlans = append(response.RepayPlans, repayPlan)
 		sumInterest = sumInterest + item.Interest
 	}
 	response.Interest = sumInterest

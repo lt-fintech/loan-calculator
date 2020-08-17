@@ -91,7 +91,7 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			term.EndTime = repayDate
 			// next term start date
 			termStartDate = repayDate
-			term.TermNo = i
+			term.TermNo = i + 1
 			sub.Terms = append(sub.Terms, term)
 
 		}
