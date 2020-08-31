@@ -3,6 +3,7 @@ package entity
 import (
 	"fmt"
 	infra "loan-calculator/infrastructure"
+	"loan-calculator/infrastructure/log"
 )
 
 type SubContract struct {
@@ -34,8 +35,9 @@ type SubContract struct {
 	OvdPrinRate int
 	OvdIntRate  int
 
-	Status     LoanStatus
-	CreateTime int64
+	Status      LoanStatus
+	AccrualTime int64
+	CreateTime  int64
 
 	SubContracts []*SubContract
 	Terms        []*Term
@@ -100,4 +102,20 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 	sub.CreateTime = accountTime
 	sub.Prin = contract.Prin
 	sub.Rate = contract.Rate
+	sub.AccrualTime = infra.GetTimePlusDay(accountTime, -1)
+}
+
+func (sub *SubContract) accrual(accountTime int64) bool {
+	betweenDay := infra.GetBetweenDays(sub.AccrualTime, accountTime)
+	if betweenDay > 1 {
+		log.Error.Println("can't accrual, last accrual day is ", sub.AccrualTime)
+		return false
+	}
+	//calculat interest
+	interest := infra.AccrualInterest(sub.Rate, sub.UnpaidPrin)
+	// for term := range sub.Terms {
+
+	// }
+	log.Info.Println(interest)
+	return true
 }

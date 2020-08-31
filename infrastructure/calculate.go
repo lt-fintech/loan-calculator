@@ -16,3 +16,7 @@ func PMTTermRepayAmount(rate int, termNum int, prin int64) int64 {
 func PMTTermInterst(rate int, day int, remainPrin int64) int64 {
 	return Round(float64(remainPrin*int64(rate)*int64(day)) / float64(1000000))
 }
+
+func AccrualInterest(rate int, remainAmount int64) int64 {
+	return Round(float64(remainAmount*int64(rate)) / float64(1000000))
+}

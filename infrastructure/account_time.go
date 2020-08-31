@@ -40,3 +40,9 @@ func GetZeroTimeFromTimestamp(tm int64) int64 {
 	return newT.UnixNano() / 1e6
 
 }
+
+func GetTimePlusDay(tm int64, daltaDay int) int64 {
+	t := time.Unix(0, tm*1e6)
+	newT := t.AddDate(0, 0, daltaDay)
+	return newT.UnixNano() / 1e6
+}

@@ -32,3 +32,11 @@ func (contract *Contract) GenerateSubContract() {
 
 	}
 }
+
+func (contract *Contract) Accrual(accountTime int64) bool {
+	if contract.SubContract != nil {
+		contract.SubContract.accrual(accountTime)
+		return true
+	}
+	return false
+}
