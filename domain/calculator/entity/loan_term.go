@@ -28,3 +28,10 @@ type Term struct {
 	Status     LoanStatus
 	CreateTime int64
 }
+
+func (term *Term) CalculateBalance() {
+	term.UnpaidPrin = term.Prin - term.PaidPrin
+	term.UnpaidInterest = term.Interest - term.PaidInterest
+	term.UnpaidOvdPrinPena = term.OvdPrinPena - term.PaidOvdPrinPena
+	term.UnpaidOvdIntPena = term.OvdPrinPena - term.PaidOvdIntPena
+}

@@ -94,6 +94,7 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			// next term start date
 			termStartDate = repayDate
 			term.TermNo = i + 1
+			term.CalculateBalance()
 			sub.Terms = append(sub.Terms, term)
 
 		}
@@ -103,6 +104,14 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 	sub.Prin = contract.Prin
 	sub.Rate = contract.Rate
 	sub.AccrualTime = infra.GetTimePlusDay(accountTime, -1)
+	sub.caculateBalance()
+}
+
+func (sub *SubContract) caculateBalance() {
+	sub.UnpaidPrin = sub.Prin - sub.PaidPrin
+	sub.UnpaidInterest = sub.Interest - sub.PaidInterest
+	sub.UnpaidOvdPrinPena = sub.OvdPrinPena - sub.PaidOvdPrinPena
+	sub.UnpaidOvdIntPena = sub.OvdPrinPena - sub.PaidOvdIntPena
 }
 
 func (sub *SubContract) accrual(accountTime int64) bool {
@@ -111,8 +120,11 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 		log.Error.Println("can't accrual, last accrual day is ", sub.AccrualTime)
 		return false
 	}
-	//calculat interest
+	//calculate interest
+	log.Info.Printf("rate=%d,unpaidPrin=%d", sub.Rate, sub.UnpaidPrin)
+	// calculate normal prin
 	interest := infra.AccrualInterest(sub.Rate, sub.UnpaidPrin)
+	// calculate ovd prin by term
 	// for term := range sub.Terms {
 
 	// }
