@@ -17,6 +17,16 @@ func Hello(w http.ResponseWriter, req *http.Request) {
 	io.WriteString(w, "Hello "+vars["name"])
 }
 
+/*
+{
+	"amount": 500,
+	"rate": 500,
+	"requestTime": 1597640186380,
+	"repayDay": 17,
+	"termNum": 6,
+	"interestType": "EQUAL_LOAN"
+}
+*/
 func TrialPayment(w http.ResponseWriter, req *http.Request) {
 	reqBody, _ := ioutil.ReadAll(req.Body)
 	var request *app.PaymentTrailRequest = new(app.PaymentTrailRequest)
