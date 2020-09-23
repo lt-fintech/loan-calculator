@@ -1,1 +1,1 @@
-./loan-calculator > run.log &
+./loan-calculator >> run.log 2>&1 &
