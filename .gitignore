@@ -4,6 +4,8 @@
 *.dll
 *.so
 *.dylib
+loan-calculator
+*.log
 
 # Test binary, built with `go test -c`
 *.test
