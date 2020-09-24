@@ -42,6 +42,8 @@ func corsHandler(h http.Handler) http.HandlerFunc {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		} else {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 			h.ServeHTTP(w, r)
 		}
 	}
