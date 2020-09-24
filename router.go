@@ -35,11 +35,22 @@ func TrialPayment(w http.ResponseWriter, req *http.Request) {
 	response := app.TrailPayment(request)
 	json.NewEncoder(w).Encode(response)
 }
+func corsHandler(h http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "OPTIONS" {
+			//handle preflight in here
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		} else {
+			h.ServeHTTP(w, r)
+		}
+	}
+}
 
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/hello/{name}", Hello)
-	r.HandleFunc("/loan/trail", TrialPayment)
+	r.Handle("/loan/trail", corsHandler(http.HandlerFunc(TrialPayment)))
 	// http.Handle("/", r)
 	http.ListenAndServe(":8000", r)
 }
