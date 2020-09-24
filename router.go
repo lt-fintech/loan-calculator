@@ -33,10 +33,12 @@ func TrialPayment(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(reqBody)
 	json.Unmarshal(reqBody, request)
 	response := app.TrailPayment(request)
-	json.NewEncoder(w).Encode(response)
+	ret, _ := json.Marshal(response)
+	w.Write(ret)
 }
 func corsHandler(h http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		if r.Method == "OPTIONS" {
 			//handle preflight in here
 			w.Header().Set("Access-Control-Allow-Origin", "*")
