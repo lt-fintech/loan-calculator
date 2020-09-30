@@ -122,12 +122,32 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 	}
 	//calculate interest
 	log.Info.Printf("rate=%d,unpaidPrin=%d", sub.Rate, sub.UnpaidPrin)
-	// calculate normal prin
-	interest := infra.AccrualInterest(sub.Rate, sub.UnpaidPrin)
-	// calculate ovd prin by term
-	// for term := range sub.Terms {
 
-	// }
-	log.Info.Println(interest)
+	// calculate normal prin
+	var normalUnpaidPrin int64 = 0
+	var activeTerm *Term
+	for _, term := range sub.Terms {
+		normalUnpaidPrin = normalUnpaidPrin + term.GetUnpaidNormalPrin()
+		if term.IsActive(accountTime) {
+			activeTerm = term
+		}
+	}
+	normalInterest := infra.AccrualInterest(sub.Rate, normalUnpaidPrin)
+	log.Info.Printf("normalInterest=%d", normalInterest)
+	if normalInterest > 0 && activeTerm != nil {
+		panic("accrual interest but no active term")
+	}
+	if activeTerm != nil {
+		activeTerm.AccrualInterest(normalInterest)
+	}
+	// calculate ovd prin by term
+	for _, term := range sub.Terms {
+		ovdUnpaidPrin := term.GetUnpaidOvdPrin()
+		ovdPrinPena := infra.AccrualInterest(sub.OvdPrinRate, ovdUnpaidPrin)
+		term.AccrualPrinPena(ovdPrinPena)
+		ovdUnpaidInterest := term.GetUnpaidOvdInterest()
+		ovdIntPena := infra.AccrualInterest(sub.OvdIntRate, ovdUnpaidInterest)
+		term.AccrualIntPena(ovdIntPena)
+	}
 	return true
 }
