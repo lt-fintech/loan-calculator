@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"fmt"
 	infra "loan-calculator/infrastructure"
 	"loan-calculator/infrastructure/log"
 )
@@ -50,8 +49,8 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 		//calculate pmt per term
 		var amountByTerm int64
 		amountByTerm = infra.PMTTermRepayAmount(sub.Rate, contract.TermNum, sub.Prin)
-		fmt.Printf("rate=%d\n", contract.Rate)
-		fmt.Printf("amountByTerm=%d\n", amountByTerm)
+		log.Info.Printf("rate=%d\n", contract.Rate)
+		log.Info.Printf("amountByTerm=%d\n", amountByTerm)
 		remainPrin := sub.Prin
 
 		//determind first term day
@@ -79,7 +78,7 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 				prin = remainPrin
 			}
 			remainPrin = remainPrin - prin
-			fmt.Printf("termDay=%d,prin=%d,interest=%d,repayDate=%d\n", termDay, prin, interest, repayDate)
+			log.Info.Printf("termDay=%d,prin=%d,interest=%d,repayDate=%d\n", termDay, prin, interest, repayDate)
 			var term *Term
 			term = new(Term)
 			term.UserId = contract.UserId
