@@ -115,6 +115,11 @@ func (sub *SubContract) caculateBalance() {
 
 func (sub *SubContract) accrual(accountTime int64) bool {
 	betweenDay := infra.GetBetweenDays(sub.AccrualTime, accountTime)
+	log.Trace.Printf("accrual between day=%d\n", betweenDay)
+	if betweenDay == 0 {
+		log.Info.Println("today have accrualed")
+		return true
+	}
 	if betweenDay > 1 {
 		log.Error.Println("can't accrual, last accrual day is ", sub.AccrualTime)
 		return false
@@ -148,5 +153,6 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 		ovdIntPena := infra.AccrualInterest(sub.OvdIntRate, ovdUnpaidInterest)
 		term.AccrualIntPena(ovdIntPena)
 	}
+	sub.AccrualTime = accountTime
 	return true
 }

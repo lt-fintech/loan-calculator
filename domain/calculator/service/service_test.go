@@ -26,4 +26,5 @@ func TestAccrual(t *testing.T) {
 
 	contract := GenerateContract(payment)
 	contract.Accrual(infra.GetTimestamp())
+	contract.Accrual(infra.GetTimestamp())
 }
