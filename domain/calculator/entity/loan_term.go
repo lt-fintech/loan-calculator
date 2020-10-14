@@ -1,5 +1,9 @@
 package entity
 
+import (
+	infra "loan-calculator/infrastructure"
+)
+
 type Term struct {
 	Id            int64
 	UserId        int64
@@ -30,7 +34,20 @@ type Term struct {
 }
 
 func (term *Term) IsActive(accountTime int64) bool {
-	if accountTime > term.StartTime && accountTime < term.EndTime {
+	// log.Info.Printf("start=%d end=%d accounttime=%d %t", term.StartTime, term.EndTime, accountTime, accountTime >= term.StartTime && accountTime < term.EndTime)
+	if accountTime >= term.StartTime && accountTime < term.EndTime {
+		return true
+	}
+	return false
+}
+func (term *Term) IsLastDay(accountTime int64) bool {
+	if infra.GetBetweenDays(accountTime, term.EndTime) == 1 {
+		return true
+	}
+	return false
+}
+func (term *Term) IsRepayDay(accountTime int64) bool {
+	if infra.GetBetweenDays(term.EndTime, accountTime) == 0 {
 		return true
 	}
 	return false

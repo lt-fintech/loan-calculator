@@ -138,7 +138,7 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 	}
 	normalInterest := infra.AccrualInterest(sub.Rate, normalUnpaidPrin)
 	log.Info.Printf("normalInterest=%d", normalInterest)
-	if normalInterest > 0 && activeTerm != nil {
+	if normalInterest > 0 && activeTerm == nil {
 		panic("accrual interest but no active term")
 	}
 	if activeTerm != nil {
