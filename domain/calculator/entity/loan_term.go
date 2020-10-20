@@ -26,11 +26,12 @@ type Term struct {
 	PaidOvdIntPena   int64
 	UnpaidOvdIntPena int64
 
-	TermNo     int
-	StartTime  int64
-	EndTime    int64
-	Status     LoanStatus
-	CreateTime int64
+	TermNo           int
+	StartTime        int64
+	AccrualStartTime int64
+	EndTime          int64
+	Status           LoanStatus
+	CreateTime       int64
 }
 
 func (term *Term) IsActive(accountTime int64) bool {

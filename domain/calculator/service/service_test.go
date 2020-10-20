@@ -31,7 +31,7 @@ func TestAccrual(t *testing.T) {
 
 func TestLastDayAccrual(t *testing.T) {
 	payment := new(PaymentRequest)
-	payment.Amount = 50000
+	payment.Amount = 5000
 	payment.RepayDay = 1
 	payment.TermNum = 6
 	payment.Rate = 300
@@ -42,4 +42,5 @@ func TestLastDayAccrual(t *testing.T) {
 		// t.Logf("accountTime=%d", i)
 		contract.Accrual(i)
 	}
+	t.Logf("%+v/n", contract.SubContract.Terms[0])
 }

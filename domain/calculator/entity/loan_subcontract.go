@@ -82,13 +82,14 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 			var term *Term
 			term = new(Term)
 			term.UserId = contract.UserId
-			term.Interest = interest
+			term.Interest = 0
 			term.Prin = prin
 			term.Status = NORMAL
 			term.CreateTime = accountTime
 			term.SubContractId = sub.Id
 			term.TrailInterest = interest
 			term.StartTime = termStartDate
+			term.AccrualStartTime = termStartDate
 			term.EndTime = repayDate
 			// next term start date
 			termStartDate = repayDate
@@ -136,21 +137,19 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 			activeTerm = term
 		}
 	}
-	normalInterest := infra.AccrualInterest(sub.Rate, normalUnpaidPrin)
-	log.Info.Printf("normalInterest=%d", normalInterest)
-	if normalInterest > 0 && activeTerm == nil {
-		panic("accrual interest but no active term")
-	}
 	if activeTerm != nil {
+		accrualedDay := infra.GetBetweenDays(activeTerm.AccrualStartTime, accountTime) + 1
+		normalInterest := infra.AccrualInterest(sub.Rate, normalUnpaidPrin, accrualedDay, activeTerm.Interest)
+		log.Info.Printf("accrualedDay=%d,accountTime=%d,normalInterest=%d", accrualedDay, accountTime, normalInterest)
 		activeTerm.AccrualInterest(normalInterest)
 	}
 	// calculate ovd prin by term
 	for _, term := range sub.Terms {
 		ovdUnpaidPrin := term.GetUnpaidOvdPrin()
-		ovdPrinPena := infra.AccrualInterest(sub.OvdPrinRate, ovdUnpaidPrin)
+		ovdPrinPena := infra.AccrualOvdInterest(sub.OvdPrinRate, ovdUnpaidPrin)
 		term.AccrualPrinPena(ovdPrinPena)
 		ovdUnpaidInterest := term.GetUnpaidOvdInterest()
-		ovdIntPena := infra.AccrualInterest(sub.OvdIntRate, ovdUnpaidInterest)
+		ovdIntPena := infra.AccrualOvdInterest(sub.OvdIntRate, ovdUnpaidInterest)
 		term.AccrualIntPena(ovdIntPena)
 	}
 	sub.AccrualTime = accountTime
