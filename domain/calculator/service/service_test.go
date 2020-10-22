@@ -44,3 +44,22 @@ func TestLastDayAccrual(t *testing.T) {
 	}
 	t.Logf("%+v/n", contract.SubContract.Terms[0])
 }
+
+func TestFirstOvdAccrual(t *testing.T) {
+	payment := new(PaymentRequest)
+	payment.Amount = 50000
+	payment.RepayDay = 1
+	payment.TermNum = 6
+	payment.Rate = 300
+	payment.OvdPrinRate = 300 * 1.5
+	payment.OvdIntRate = 300 * 1.5
+
+	contract := GenerateContract(payment)
+	t.Logf("%+v/n", contract.SubContract)
+	curTime := infra.GetTimestamp()
+	for i := curTime; i < infra.GetNextRepayDate(curTime, payment.RepayDay, 20)+86400000*2; i = i + 86400000 {
+		// t.Logf("accountTime=%d", i)
+		contract.Accrual(i)
+	}
+	t.Logf("%+v/n", contract.SubContract.Terms[0])
+}

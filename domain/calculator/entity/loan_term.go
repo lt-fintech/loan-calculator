@@ -81,10 +81,13 @@ func (term *Term) GetUnpaidOvdInterest() int64 {
 
 func (term *Term) AccrualInterest(interest int64) {
 	term.Interest = term.Interest + interest
+	term.CalculateBalance()
 }
 func (term *Term) AccrualPrinPena(ovdPrinPena int64) {
 	term.OvdPrinPena = term.OvdPrinPena + ovdPrinPena
+	term.CalculateBalance()
 }
 func (term *Term) AccrualIntPena(ovdIntPena int64) {
 	term.OvdIntPena = term.OvdIntPena + ovdIntPena
+	term.CalculateBalance()
 }

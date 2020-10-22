@@ -103,6 +103,8 @@ func (sub *SubContract) generateSubContract(contract *Contract, parent *SubContr
 	sub.CreateTime = accountTime
 	sub.Prin = contract.Prin
 	sub.Rate = contract.Rate
+	sub.OvdPrinRate = contract.OvdPrinRate
+	sub.OvdIntRate = contract.OvdIntRate
 	sub.AccrualTime = infra.GetTimePlusDay(accountTime, -1)
 	sub.caculateBalance()
 }
@@ -117,7 +119,7 @@ func (sub *SubContract) caculateBalance() {
 func (sub *SubContract) accrual(accountTime int64) bool {
 	betweenDay := infra.GetBetweenDays(sub.AccrualTime, accountTime)
 	log.Trace.Printf("accrual between day=%d\n", betweenDay)
-	if betweenDay == 0 {
+	if betweenDay <= 0 {
 		log.Info.Println("today have accrualed")
 		return true
 	}
@@ -140,18 +142,24 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 	if activeTerm != nil {
 		accrualedDay := infra.GetBetweenDays(activeTerm.AccrualStartTime, accountTime) + 1
 		normalInterest := infra.AccrualInterest(sub.Rate, normalUnpaidPrin, accrualedDay, activeTerm.Interest)
-		log.Info.Printf("accrualedDay=%d,accountTime=%d,normalInterest=%d", accrualedDay, accountTime, normalInterest)
+		log.Info.Printf("termNo=%d,accrualedDay=%d,accountTime=%d,normalInterest=%d", activeTerm.TermNo, accrualedDay, accountTime, normalInterest)
 		activeTerm.AccrualInterest(normalInterest)
 	}
 	// calculate ovd prin by term
 	for _, term := range sub.Terms {
+		accrualedDay := infra.GetBetweenDays(term.EndTime, accountTime) + 1
 		ovdUnpaidPrin := term.GetUnpaidOvdPrin()
+		log.Info.Printf("rate=%d,unpaidprin=%d", sub.OvdPrinRate, ovdUnpaidPrin)
 		ovdPrinPena := infra.AccrualOvdInterest(sub.OvdPrinRate, ovdUnpaidPrin)
 		term.AccrualPrinPena(ovdPrinPena)
 		ovdUnpaidInterest := term.GetUnpaidOvdInterest()
 		ovdIntPena := infra.AccrualOvdInterest(sub.OvdIntRate, ovdUnpaidInterest)
 		term.AccrualIntPena(ovdIntPena)
+		if ovdPrinPena > 0 || ovdIntPena > 0 {
+			log.Info.Printf("accrualedDay=%d,accountTime=%d,ovdPrinPena=%d,ovdIntPena=%d", accrualedDay, accountTime, ovdPrinPena, ovdIntPena)
+		}
 	}
 	sub.AccrualTime = accountTime
+	sub.caculateBalance()
 	return true
 }
