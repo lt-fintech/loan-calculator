@@ -127,8 +127,15 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 		log.Error.Println("can't accrual, last accrual day is ", sub.AccrualTime)
 		return false
 	}
+	//calculate if ovd
+	for _, term := range sub.Terms {
+		if term.IsOvd(accountTime) {
+			term.Status = OVD
+			sub.Status = OVD
+		}
+	}
+
 	//calculate interest
-	log.Info.Printf("rate=%d,unpaidPrin=%d", sub.Rate, sub.UnpaidPrin)
 
 	// calculate normal prin
 	var normalUnpaidPrin int64 = 0

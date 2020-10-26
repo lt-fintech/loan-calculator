@@ -53,11 +53,17 @@ func (term *Term) IsRepayDay(accountTime int64) bool {
 	}
 	return false
 }
+func (term *Term) IsOvd(accountTime int64) bool {
+	if term.Status == OVD || (term.Status == NORMAL && infra.GetBetweenDays(term.EndTime, accountTime) > 0) {
+		return true
+	}
+	return false
+}
 func (term *Term) CalculateBalance() {
 	term.UnpaidPrin = term.Prin - term.PaidPrin
 	term.UnpaidInterest = term.Interest - term.PaidInterest
 	term.UnpaidOvdPrinPena = term.OvdPrinPena - term.PaidOvdPrinPena
-	term.UnpaidOvdIntPena = term.OvdPrinPena - term.PaidOvdIntPena
+	term.UnpaidOvdIntPena = term.OvdIntPena - term.PaidOvdIntPena
 }
 
 func (term *Term) GetUnpaidNormalPrin() int64 {
