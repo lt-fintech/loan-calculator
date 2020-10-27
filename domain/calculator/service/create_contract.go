@@ -16,6 +16,11 @@ type PaymentRequest struct {
 	TermNum      int
 	InterestType product.InterestType
 }
+type RepaymentRequest struct {
+	UserId    int64
+	Amount    int64
+	RepayTime int64
+}
 
 func GenerateContract(paymentRequest *PaymentRequest) *entity.Contract {
 	var contract *entity.Contract
