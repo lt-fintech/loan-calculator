@@ -170,3 +170,8 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 	sub.caculateBalance()
 	return true
 }
+
+func (sub *SubContract) Repayment(repayment *RepaymentRequest) bool {
+	return false
+
+}

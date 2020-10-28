@@ -85,5 +85,5 @@ func TestRepayment(t *testing.T) {
 	repayment := new(RepaymentRequest)
 	repayment.Amount = 50000
 	repayment.RepayTime = repaytime
-	Repayment(repayment)
+	contract.Repayment(repayment)
 }

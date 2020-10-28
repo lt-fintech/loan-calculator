@@ -40,3 +40,11 @@ func (contract *Contract) Accrual(accountTime int64) bool {
 	}
 	return false
 }
+
+func (contract *Contract) Repayment(repayment *RepaymentRequest) bool {
+	if contract.SubContract != nil {
+		contract.SubContract.Repayment(repayment)
+		return true
+	}
+	return false
+}
