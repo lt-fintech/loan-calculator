@@ -1,6 +1,7 @@
 package entity
 
 import (
+	event "loan-calculator/domain/calculator/event"
 	infra "loan-calculator/infrastructure"
 	"loan-calculator/infrastructure/log"
 )
@@ -156,7 +157,7 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 	for _, term := range sub.Terms {
 		accrualedDay := infra.GetBetweenDays(term.EndTime, accountTime) + 1
 		ovdUnpaidPrin := term.GetUnpaidOvdPrin()
-		log.Info.Printf("rate=%d,unpaidprin=%d", sub.OvdPrinRate, ovdUnpaidPrin)
+		// log.Info.Printf("rate=%d,unpaidprin=%d", sub.OvdPrinRate, ovdUnpaidPrin)
 		ovdPrinPena := infra.AccrualOvdInterest(sub.OvdPrinRate, ovdUnpaidPrin)
 		term.AccrualPrinPena(ovdPrinPena)
 		ovdUnpaidInterest := term.GetUnpaidOvdInterest()
@@ -171,7 +172,7 @@ func (sub *SubContract) accrual(accountTime int64) bool {
 	return true
 }
 
-func (sub *SubContract) Repayment(repayment *RepaymentRequest) bool {
+func (sub *SubContract) Repayment(repayment *event.RepaymentRequest) bool {
 	return false
 
 }

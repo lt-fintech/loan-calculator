@@ -1,6 +1,7 @@
 package service
 
 import (
+	"loan-calculator/domain/calculator/event"
 	infra "loan-calculator/infrastructure"
 	"testing"
 )
@@ -82,7 +83,7 @@ func TestRepayment(t *testing.T) {
 		contract.Accrual(i)
 		repaytime = i
 	}
-	repayment := new(RepaymentRequest)
+	repayment := new(event.RepaymentRequest)
 	repayment.Amount = 50000
 	repayment.RepayTime = repaytime
 	contract.Repayment(repayment)

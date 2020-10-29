@@ -1,5 +1,9 @@
 package entity
 
+import (
+	event "loan-calculator/domain/calculator/event"
+)
+
 type Contract struct {
 	Id          int64
 	UserId      int64
@@ -41,7 +45,7 @@ func (contract *Contract) Accrual(accountTime int64) bool {
 	return false
 }
 
-func (contract *Contract) Repayment(repayment *RepaymentRequest) bool {
+func (contract *Contract) Repayment(repayment *event.RepaymentRequest) bool {
 	if contract.SubContract != nil {
 		contract.SubContract.Repayment(repayment)
 		return true
